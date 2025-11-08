@@ -1,51 +1,82 @@
-Ryzentosh Lenovo Ideapad gaming 3 (15ach6) EFI
-What works and what doesn't
+# Ryzentosh — Lenovo IdeaPad Gaming 3 (15ACH6) EFI
+### I no longer use this Hackintosh
+This build was created for experimental purposes and I no longer use it. Contributions are welcome — open a pull request if you need changes.
 
-Working: Camera, brightness, speakers, mic, ethernet, power managment
+A curated OpenCore EFI for running macOS on the Lenovo IdeaPad Gaming 3 (15ACH6) with AMD Ryzen processors.
 
-Broken: WLAN, Bluetooth, dGPU ( Will Try To Fix ASAP Using Intel WLAN Card )
-What's required?
+### Laptop configuration
 
-    Lenovo ideapad gaming 3 - With AMD Ryzen 7 5800H (others may work, but will need some configurations)
-    Mac / Hackintosh // You can use Windows / Linux PC to create a web installer
-    Atleast 32 GB USB stick
-    A lot of time and patience
-    Ethernet cable or Android phone with internet over USB.
-    macOS BigSur, Monterey, Ventura, Sonoma ( Should Be Work )
-    A brain
+| Hardware  | Details |
+|---|---|
+| CPU | AMD Ryzen 7 5800H — 8 cores / 16 threads |
+| Memory | 32 GB SO‑DIMM DDR4 3200 MHz |
+| Storage | PCIe M.2 NVMe 1 TB + 512 GB SSD |
+| Graphics | Vega 8 (iGPU). NVIDIA dGPU disabled via ACPI |
+| Display | FHD 1920×1080 IPS, 250 nits, 144 Hz |
+| Network | MediaTek Wi‑Fi 6 MT7921 — not supported |
+| Audio jack | Functional |
 
+### Working
 
-Installation
+- Camera
+- Speakers
+- Microphone
+- Ethernet
+- 144Hz Display
+- USB Type C
+- HDMI ( Works because the hdmi scheme is not connected through egpu.)
+- Power management
+- RGB Keyboard
 
-    Create macOS installer using 'createinstallmedia'
-    Open terminal and type "diskutil list" find your USB that installer has been copied to.
-    Type "sudo disktutil mount diskXsX" replace diskXsX with your USB ID for ex. disk2s1
-    Copy whole EFI folder you can download it here onto EFI partiton of the USB DRIVE NOT YOUR PC's
-    Eject usb plug it into your laptop
-    Enter BIOS and:
+### Known issues / TODO
 
-    disable: secure boot, dedicated GPU
-    Change integrated graphics memory to 2GB
-    Set USB drive as first boot device
+- WLAN (MT7921)
+- Brightness control
+- Bluetooth
+- dGPU (NVIDIA) — work in progress. Possible workarounds: install an Intel Wi‑Fi card or use a USB Wi‑Fi adapter.
 
-    Reboot your pc with usb inserted
+### Requirements
 
-    Boot macOS installer
+- Lenovo IdeaPad Gaming 3 (15ACH6) with Ryzen 7 5800H (other Ryzen variants may work with tweaks)
+- A Mac or an existing Hackintosh (or Windows/Linux to create the installer)
+- A USB drive (at least 32 GB)
+- Time, patience, and internet access (Ethernet or USB tethering can be used during installation)
+- A copy of macOS (Big Sur, Monterey, Ventura, Sonoma reported to be compatible)
 
-    Wipe your hardrive with drive utility
+### Installation (summary)
 
-    Install macOS Note: after 2nd part of the installer 1st boot may take 30 minutes+ so be patient!
+1. Create a macOS USB installer using Apple’s createinstallmedia tool.
+2. Insert the USB drive and run diskutil list to identify the installer volume.
+3. Mount the USB EFI partition, e.g.:
+```bash
+sudo diskutil mount diskXsY   # replace diskXsY with your USB EFI partition (example: disk2s1)
+```
+4. Copy the repository’s EFI folder to the USB EFI partition (the USB’s EFI, not the internal drive).
+5. Eject USB, plug it into the laptop, and enter BIOS/UEFI.
 
-    Configure macOS
+Recommended BIOS changes:
+- Disable Secure Boot
+- Disable the NVIDIA dGPU through bios if u want the laptop stay silent.
+- Set integrated graphics memory to 1-4 GB
+- Set USB drive as the first boot device
 
-    Download the EFI again
+6. Boot the USB installer and install macOS. The first boot after stage two can be slow (1 Hour during optimizations) — be patient.
 
-    Open termial and type: "sudo diskutil mount disk0s1"
+### Post-install
 
-    Copy EFI folder onto EFI partiton OF YOUR COMPUTER NOT YOUR USB DRIVE
+1. Mount the internal EFI partition and copy the EFI folder to it:
+```bash
+sudo diskutil mount disk0s1
+```
+2. Copy the EFI folder to the mounted partition (adjust paths as needed).
+3. Install required kexts/drivers (for audio, consider AppleALC with the appropriate layout/patches or alternatives per kext docs).
+4. Follow an OpenCore guide to create a proper SMBIOS for your system.
 
-    Download VooDooHDA here and follow the instructions there.
+### Screenshots
 
-    Use Open Core tutorial above to generate a SMBIOS
+Below are screenshots from this build/installer:
 
-    DONE
+![Screenshot 2025-11-01 at 17.15.17](./Screenshot%202025-11-01%20at%2017.15.17.png)
+
+![Screenshot 2025-11-01 at 17.15.21](./Screenshot%202025-11-01%20at%2017.15.21.png)
+
